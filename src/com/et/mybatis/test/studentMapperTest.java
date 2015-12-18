@@ -7,6 +7,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Test;
 
 import com.et.mybatis.bean.Student;
 
@@ -41,7 +42,7 @@ public class studentMapperTest {
    /**
     *方式一：演示了一对一的联合查询
     */
-   private static void getSydentOneToOneJoin() {
+   private void getSydentOneToOneJoin() {
       SqlSession sqlSession = sessionFactory.openSession();
       System.out.println(sqlSession.selectOne("student.getSydentOneToOneJoin", 1));
    }
@@ -49,7 +50,7 @@ public class studentMapperTest {
    /**
     *方式一：演示了一对一的嵌套查询 
     */
-   private static void getStudenttOneToOneNest() {
+   private void getStudenttOneToOneNest() {
       SqlSession sqlSession = sessionFactory.openSession();
       System.out.println(sqlSession.selectOne("student.getStudenttOneToOneNest", 1));
    }
@@ -57,12 +58,19 @@ public class studentMapperTest {
    /**
     *动态sql
     */
-   private static void getStudentByWhere() {
+   private void getStudentByWhere() {
       SqlSession sqlSession = sessionFactory.openSession();
-      System.out.println(sqlSession.selectList("student.getStudentByWhere", new Student(1, "w")));
+      System.out.println(sqlSession.selectList("student.getStudentByWhere", new Student(1, "zh", 1)));
    }
 
-   public static void main(String[] args) {
+   private void add() {
+      SqlSession sqlSession = sessionFactory.openSession();
+      sqlSession.insert("student.addStudent", new Student("zhangsan", 1));
+      sqlSession.commit();
+   }
+
+   @Test
+   public void testMethod() {
       // add();
       // getSydentOneToOneJoin();
       getStudenttOneToOneNest();

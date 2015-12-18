@@ -29,9 +29,17 @@
 	<select id="getAllTeacher" resultType="teacher">
 		<![CDATA[select * from Teacher ]]>
 	</select>
-	<!-- 添加 -->
+	<!-- 添加teacher -->
 	<insert id="addTeacher" parameterType="teacher">
 		<![CDATA[insert into Teacher(name, age) values(#{name}, #{age}) ]]>
+	</insert>
+	<!-- 添加student -->
+	<insert id="addStudent" parameterType="student">
+	<selectKey resultType="java.lang.Integer" order="BEFORE"
+		keyProperty="id">
+		SELECT seq_student.Nextval as PID from DUAL
+	</selectKey>
+		<![CDATA[insert into student(s_id,s_name,teacher_id) values(#{id},#{name}, #{teacherId}) ]]>
 	</insert>
 	<!--根据id删除 -->
 	<delete id="deleteTeacherById" parameterType="int">
@@ -46,7 +54,7 @@
 	<select id="getSydentOneToOneJoin" parameterType="int"
 		resultMap="SydentOneToOneJoinResultMap">
 		<![CDATA[select s.id, s.name, s.teacher_id, t.id t_id, t.name t_name, t.age t_age
-          from student as s, teacher as t
+          from student s, teacher t
           where t.id = s.teacher_id and s.id = #{id}]]>
 	</select>
 
@@ -72,7 +80,7 @@
 					id=id
 				</if>
 				<if test="name!=null">
-					and name like concat('%',#{name},'%')<!-- '%${name}%' -->
+					and name like '%${name}%'<!-- oracle:'%${name}%' ,mysql:concat('%',#{name},'%')-->
 				</if>
 			</trim>
 		</where>

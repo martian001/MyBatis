@@ -73,7 +73,7 @@ public class TeacherMapperTest {
    private static void getTeacherOneToMeny() {
       SqlSession sqlSession = sessionFactory.openSession();
       TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
-      System.out.println(teacherMapper.getTeacherOneToMeny(2));
+      System.out.println(teacherMapper.getTeacherOneToMeny(1));
    }
 
    /**
@@ -82,16 +82,16 @@ public class TeacherMapperTest {
    private static void getTeacherOneToMenyNest() {
       SqlSession sqlSession = sessionFactory.openSession();
       TeacherMapper teacherMapper = sqlSession.getMapper(TeacherMapper.class);
-      System.out.println(teacherMapper.getTeacherOneToMenyNest(2));
+      System.out.println(teacherMapper.getTeacherOneToMenyNest(1));
    }
 
    @Test
    public void testMethod() {
-      add();
+      // add();
       // delete();
-      selectAll();
+      // selectAll();
       // getTeacherOneToMeny();
-      // getTeacherOneToMenyNest();
+      getTeacherOneToMenyNest();
    }
 
 }
