@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 别名 -->
+	<typeAliases>
+		<typeAlias type="com.et.mybatis.bean.User" alias="user" />
+		<typeAlias type="com.et.mybatis.bean.Teacher" alias="teacher" />
+		<typeAlias type="com.et.mybatis.bean.Student" alias="student" />
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.p6spy.engine.spy.P6SpyDriver" />
+				<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+				<property name="username" value="scott" />
+				<property name="password" value="tiger" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- 如果是映射文件,那么就用resource属性注册 -->
+		<mapper resource="userMapper.xml" />
+		<!-- 如果是接口绑定类,那么就用class属性指定映射类的全文件名 -->
+		<mapper class="com.et.mybatis.Mapper.UserInterfaceMapper" />
+		<mapper resource="teacherMapper.xml" />
+		<mapper resource="studentMapper.xml" />
+	</mappers>
+
+</configuration>

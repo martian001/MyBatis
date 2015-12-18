@@ -1,0 +1,7 @@
+P6Spy配置步骤(2考2配)
+1:拷贝p6spy.jar放入lib下面
+2:拷贝spy.properties到src下面
+3:首先在spy.properties配置一个数据库的真正的driver,譬如是h2,那么就配置realdriver=org.h2.Driver
+4:在你的数据库连接的地方,配置驱动程序为p6spy的驱动程序,必须是:com.p6spy.engine.spy.P6SpyDriver
+注意:如果都配置好了,还是没有出现sql打印,报类似but it has been loaded before p6spy...... 那么就要配置
+spy.properties里面的参数deregisterdrivers=true

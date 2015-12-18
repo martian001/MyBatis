@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 如果在接口绑定里面,接口里面不写Sql语句,sql写在当前映射文件,那么namespace必须是接口的全路径名 -->
+<mapper namespace="com.et.mybatis.Mapper.TeacherMapper">
+
+	<!--第一种方式 一对多的联合查询方式 -->
+	<resultMap type="teacher" id="oneToMenyJoinResultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="age" column="age" />
+		<!--collection指向一对多里面多的一方的集合,一般是list ofType指定students集合中的对象类型 -->
+		<collection property="students" ofType="student">
+			<id property="id" column="s_id" />
+			<result property="name" column="s_name" />
+		</collection>
+	</resultMap>
+
+	<!-- 第二种方式:一对多嵌套查询 -->
+	<resultMap type="teacher" id="oneToMenyNestResultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="age" column="age" />
+		<association property="students" column="id"
+			select="student.getStudentsByTeacherId">
+		</association>
+	</resultMap>
+
+	<!-- 查询所有 -->
+	<select id="getAllTeacher" resultType="teacher">
+		<![CDATA[select * from Teacher ]]>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="addTeacher" parameterType="teacher">
+	<selectKey resultType="java.lang.Integer" order="BEFORE"
+		keyProperty="id">
+		SELECT seq_teacher.Nextval as PID from DUAL
+	</selectKey>
+		<![CDATA[insert into Teacher(id,name, age) values(#{id},#{name}, #{age}) ]]>
+	</insert>
+
+	<!--根据id删除 -->
+	<delete id="deleteTeacherById" parameterType="int">
+        <![CDATA[delete from Teacher where id=#{id}]]>
+	</delete>
+
+	<!--第一种方式： 一对多的联合查询方式 -->
+	<select id="getTeacherOneToMeny" resultMap="oneToMenyJoinResultMap">
+		<![CDATA[select t.id , t.name, t.age, s.id s_id, s.name s_name, s.teacher_id
+           from public.student as s, public.teacher as t
+           where s.teacher_id = t.id and t.id = #{id}]]>
+	</select>
+
+	<!--第二种方式:一对多嵌套查询 ，根据id查询老师 -->
+	<select id="getTeacherOneToMenyNest" resultMap="oneToMenyNestResultMap"
+		parameterType="int">
+		<![CDATA[select * from Teacher where id=#{id}]]>
+	</select>
+</mapper>

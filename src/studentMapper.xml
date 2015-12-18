@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 如果在接口绑定里面,接口里面不写Sql语句,sql写在当前映射文件,那么namespace必须是接口的全路径名 -->
+<mapper namespace="student">
+
+	<!--方式一： 一对一的联合查询 -->
+	<resultMap type="student" id="SydentOneToOneJoinResultMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<!--association用来定义一对一的映射,可以把下面的属性映射到当前类的另外一个对象里面 ,就是javaType指定的类型 association 
+			包含起来表示是一个类似对象的包装 -->
+		<association property="teacher" javaType="teacher">
+			<id property="id" column="t_id" />
+			<result property="name" column="t_name" />
+			<result property="age" column="t_age" />
+		</association>
+	</resultMap>
+
+	<!--方式二： 一对一的嵌套查询 注意：这种情况一般有n+1问题,不推荐使用 -->
+	<resultMap id="StudentResultMapNest" type="student">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<association property="teacher" column="teacher_id"
+			select="getTeacherNest">
+		</association>
+	</resultMap>
+
+	<!-- 查询所有 -->
+	<select id="getAllTeacher" resultType="teacher">
+		<![CDATA[select * from Teacher ]]>
+	</select>
+	<!-- 添加 -->
+	<insert id="addTeacher" parameterType="teacher">
+		<![CDATA[insert into Teacher(name, age) values(#{name}, #{age}) ]]>
+	</insert>
+	<!--根据id删除 -->
+	<delete id="deleteTeacherById" parameterType="int">
+        <![CDATA[delete from Teacher where id=#{id}]]>
+	</delete>
+	<!-- 根据老师的id查询学生 -->
+	<select id="getStudentsByTeacherId" resultType="student"
+		parameterType="int">
+		<![CDATA[select * from student where teacher_id=#{id} ]]>
+	</select>
+	<!--方式一： 一对一的联合查询 -->
+	<select id="getSydentOneToOneJoin" parameterType="int"
+		resultMap="SydentOneToOneJoinResultMap">
+		<![CDATA[select s.id, s.name, s.teacher_id, t.id t_id, t.name t_name, t.age t_age
+          from student as s, teacher as t
+          where t.id = s.teacher_id and s.id = #{id}]]>
+	</select>
+
+	<!--方式二： 一对一的嵌套查询，根据id查询学生 -->
+	<select id="getStudenttOneToOneNest" parameterType="int"
+		resultMap="StudentResultMapNest">
+		<![CDATA[select * from student where id=#{id}]]>
+	</select>
+	<!--方式二： 一对一的嵌套查询， 根据id查询老师 -->
+	<select id="getTeacherNest" parameterType="int" resultType="teacher">
+		<![CDATA[select * from Teacher where id=#{id}]]>
+	</select>
+
+	<!-- 动态sql -->
+	<select id="getStudentByWhere" parameterType="student"
+		resultType="student">
+		<![CDATA[select * from Student ]]>
+		<where>
+			<!-- 用来处理如果where后面是以and开头的条件,那么可以自动去掉and -->
+			<trim>
+				<!-- 根据if用OGNL表达式来判断字段是否为空来显示Sql语句 -->
+				<if test="id>0">
+					id=id
+				</if>
+				<if test="name!=null">
+					and name like concat('%',#{name},'%')<!-- '%${name}%' -->
+				</if>
+			</trim>
+		</where>
+	</select>
+
+</mapper>
