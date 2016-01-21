@@ -39,7 +39,7 @@
 		keyProperty="id">
 		SELECT seq_student.Nextval as PID from DUAL
 	</selectKey>
-		<![CDATA[insert into student(s_id,s_name,teacher_id) values(#{id},#{name}, #{teacherId}) ]]>
+		<![CDATA[insert into student(id,name,teacher_id) values(#{id},#{name}, #{teacherId}) ]]>
 	</insert>
 	<!--根据id删除 -->
 	<delete id="deleteTeacherById" parameterType="int">
