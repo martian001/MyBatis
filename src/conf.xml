@@ -12,18 +12,18 @@
 			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
 				<property name="driver" value="com.p6spy.engine.spy.P6SpyDriver" />
-				<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
-				<property name="username" value="scott" />
-				<property name="password" value="tiger" />
+				<property name="url" value="jdbc:mysql://192.168.0.212:3306/p2pdb" />
+				<property name="username" value="root" />
+				<property name="password" value="123456" />
 			</dataSource>
 		</environment>
 	</environments>
 	<mappers>
 		<!-- 如果是映射文件,那么就用resource属性注册 -->
-		<mapper resource="userMapper.xml" />
-		<!-- 如果是接口绑定类,那么就用class属性指定映射类的全文件名 -->
+<!-- 		<mapper resource="userMapper.xml" />
+		如果是接口绑定类,那么就用class属性指定映射类的全文件名
 		<mapper class="com.et.mybatis.Mapper.UserInterfaceMapper" />
-		<mapper resource="teacherMapper.xml" />
+		<mapper resource="teacherMapper.xml" /> -->
 		<mapper resource="studentMapper.xml" />
 	</mappers>
 

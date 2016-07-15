@@ -2,6 +2,7 @@ package com.et.mybatis.test;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -65,15 +66,22 @@ public class studentMapperTest {
 
    private void add() {
       SqlSession sqlSession = sessionFactory.openSession();
-      sqlSession.insert("student.addStudent", new Student("zhangsan", 1));
+      Student s = new Student("zhangsan", 1);
+      sqlSession.insert("student.addStudent", s);
       sqlSession.commit();
+      System.out.println(s);
    }
-
+   private void getStudentByWhere2() {
+      SqlSession sqlSession = sessionFactory.openSession();
+      List<Object> selectList = sqlSession.selectList("student.getUserInfoDetil", "10000032700010");
+      System.out.println(selectList.size());
+   }
    @Test
    public void testMethod() {
-      // add();
+      getStudentByWhere2();
+//       add();
       // getSydentOneToOneJoin();
-      getStudenttOneToOneNest();
+//      getStudenttOneToOneNest();
       // getStudentByWhere();
    }
 }
